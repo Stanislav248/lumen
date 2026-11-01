@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Зали{% endblock %}
+{% block content %}
+<div class="page-head">
+    <p class="eyebrow">Де відбувається магія</p>
+    <h1>Наші зали</h1>
+</div>
+<div class="grid">
+    {% for hall in halls %}
+    <a class="hall-card" href="{% url 'cinema:hall_detail' hall.pk %}">
+        <h3>{{ hall.name }}</h3>
+        <div class="num">{{ hall.seats }} <small>місць</small></div>
+        <p class="muted">Сеансів: {{ hall.screenings.count }}</p>
+    </a>
+    {% empty %}
+    <p class="empty">Залів поки немає.</p>
+    {% endfor %}
+</div>
+{% endblock %}

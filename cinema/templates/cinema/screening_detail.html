@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ screening.title }}{% endblock %}
+{% block content %}
+{% widthratio screening.free_seats screening.hall.seats 100 as free_pct %}
+<a class="back" href="{% url 'cinema:screening_list' %}">← Уся афіша</a>
+<div class="detail" style="--g: {{ screening.genre_id }}">
+    <div class="poster poster-lg">
+        <span class="badge-age">{{ screening.age_limit }}+</span>
+        <span class="poster-letter">{{ screening.title|slice:":1" }}</span>
+        <span class="genre-tag">{{ screening.genre.name }}</span>
+    </div>
+    <div>
+        <p class="eyebrow">{{ screening.genre.name }}</p>
+        <h1>{{ screening.title }}</h1>
+        <div class="info-chips">
+            <div class="info-chip"><small>Дата</small>{{ screening.start_time|date:"l, j E" }}</div>
+            <div class="info-chip"><small>Початок</small>{{ screening.start_time|date:"H:i" }}</div>
+            <div class="info-chip"><small>Зал</small><a href="{% url 'cinema:hall_detail' screening.hall.pk %}">{{ screening.hall.name }}</a></div>
+            <div class="info-chip"><small>Вік</small>{{ screening.age_limit }}+</div>
+        </div>
+        {% if screening.description %}<p class="lead">{{ screening.description }}</p>{% endif %}
+
+        <div class="panel">
+            <div class="panel-row">
+                <span class="big-price">{{ screening.price }} ₴</span>
+                <span class="muted">Вільно {{ screening.free_seats }} з {{ screening.hall.seats }} місць</span>
+            </div>
+            <div class="meter{% if screening.free_seats < 10 %} low{% endif %}"><span style="width: {{ free_pct }}%"></span></div>
+        </div>
+
+        <div class="actions">
+            {% if screening.free_seats > 0 %}
+                <a class="btn" href="{% url 'cinema:ticket_create' screening.pk %}">Купити квитки</a>
+            {% else %}
+                <span class="badge-sold">Квитків немає</span>
+            {% endif %}
+            {% if user.is_staff %}
+                <a class="btn btn-ghost" href="{% url 'cinema:screening_update' screening.pk %}">Редагувати</a>
+                <a class="btn btn-ghost" href="{% url 'cinema:screening_delete' screening.pk %}">Видалити</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

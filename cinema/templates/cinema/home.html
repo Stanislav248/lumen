@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Головна{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">Кінотеатр · щодня</p>
+        <h1>Кіно, яке <span class="grad">варто побачити</span> на великому екрані</h1>
+        <p class="lead">Обирайте сеанс, перевіряйте вільні місця й купуйте квитки без реєстрації.</p>
+        <div class="actions">
+            <a class="btn" href="{% url 'cinema:screening_list' %}">Обрати сеанс</a>
+            <a class="btn btn-ghost" href="{% url 'cinema:hall_list' %}">Наші зали</a>
+        </div>
+        <ul class="stats">
+            <li><b>{{ screening_count }}</b><span>Сеансів</span></li>
+            <li><b>{{ hall_count }}</b><span>Залів</span></li>
+            <li><b>{{ genre_count }}</b><span>Жанрів</span></li>
+        </ul>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+        <div class="ticket">
+            <div class="ticket-main">
+                <small>Admit one</small>
+                <strong>Ваш вечір<br>починається тут</strong>
+                <small>Ряд 7 · Місце 12</small>
+            </div>
+            <div class="ticket-stub"><span>LUMEN</span></div>
+        </div>
+    </div>
+</section>
+
+<div class="section-head">
+    <div>
+        <p class="eyebrow">На великому екрані</p>
+        <h2>Найновіші сеанси</h2>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="{% url 'cinema:screening_list' %}">Уся афіша →</a>
+</div>
+<div class="grid">
+    {% for s in latest %}
+        {% include "cinema/_screening_card.html" %}
+    {% empty %}
+        <p class="empty">Сеансів поки немає.</p>
+    {% endfor %}
+</div>
+{% endblock %}

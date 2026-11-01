@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Кінотеатр{% endblock %} · LUMEN</title>
+    <link rel="stylesheet" href="{% static 'cinema/style.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <nav class="container nav">
+        {% with page=request.resolver_match.url_name %}
+        <a class="brand" href="{% url 'cinema:home' %}"><span class="brand-mark">L</span>LUMEN</a>
+        <a class="link{% if page == 'home' %} active{% endif %}" href="{% url 'cinema:home' %}">Головна</a>
+        <a class="link{% if page in 'screening_list screening_detail ticket_create' %} active{% endif %}" href="{% url 'cinema:screening_list' %}">Афіша</a>
+        <a class="link{% if page in 'hall_list hall_detail' %} active{% endif %}" href="{% url 'cinema:hall_list' %}">Зали</a>
+        {% if user.is_staff %}
+            <a class="link{% if page == 'ticket_list' %} active{% endif %}" href="{% url 'cinema:ticket_list' %}">Квитки</a>
+            <a class="link{% if page == 'screening_create' %} active{% endif %}" href="{% url 'cinema:screening_create' %}">Додати сеанс</a>
+        {% endif %}
+        {% endwith %}
+        <span class="spacer"></span>
+        {% if user.is_authenticated %}
+            <div class="user-box">
+                <span>{{ user.username }}</span>
+                {% if user.is_staff %}<span class="role">персонал</span>{% endif %}
+                <form method="post" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-ghost btn-sm">Вийти</button>
+                </form>
+            </div>
+        {% else %}
+            <a class="link" href="{% url 'accounts:login' %}">Увійти</a>
+            <a class="btn btn-sm" href="{% url 'accounts:register' %}">Реєстрація</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main class="container">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="msg {{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <span>© {% now "Y" %} LUMEN · кінотеатр</span>
+        <span>Сеанси щодня</span>
+    </div>
+</footer>
+</body>
+</html>

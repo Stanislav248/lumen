@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Афіша{% endblock %}
+{% block content %}
+<div class="page-head">
+    <p class="eyebrow">Розклад</p>
+    <h1>Афіша</h1>
+</div>
+<div class="toolbar">
+    <form class="search" method="get" action="{% url 'cinema:screening_list' %}">
+        <input type="text" name="q" value="{{ q }}" placeholder="Пошук за назвою фільму">
+        {% if genre_id %}<input type="hidden" name="genre" value="{{ genre_id }}">{% endif %}
+        <button type="submit" class="btn">Знайти</button>
+    </form>
+    <div class="chips">
+        <a class="chip{% if not genre_id %} active{% endif %}"
+           href="{% url 'cinema:screening_list' %}{% if q %}?q={{ q|urlencode }}{% endif %}">Усі жанри</a>
+        {% for g in genres %}
+        <a class="chip{% if genre_id == g.pk|stringformat:'s' %} active{% endif %}"
+           href="{% url 'cinema:screening_list' %}?genre={{ g.pk }}{% if q %}&q={{ q|urlencode }}{% endif %}">{{ g.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+<div class="grid">
+    {% for s in screenings %}
+        {% include "cinema/_screening_card.html" %}
+    {% empty %}
+        <p class="empty">Нічого не знайдено. Спробуйте змінити запит або жанр.</p>
+    {% endfor %}
+</div>
+{% endblock %}

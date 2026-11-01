@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Купівля квитків{% endblock %}
+{% block content %}
+{% widthratio screening.free_seats screening.hall.seats 100 as free_pct %}
+<a class="back" href="{% url 'cinema:screening_detail' screening.pk %}">← До сеансу</a>
+<div class="split" style="--g: {{ screening.genre_id }}">
+    <div class="poster-card">
+        <div class="poster">
+            <span class="badge-age">{{ screening.age_limit }}+</span>
+            <span class="poster-letter">{{ screening.title|slice:":1" }}</span>
+            <span class="genre-tag">{{ screening.genre.name }}</span>
+        </div>
+        <div class="poster-body">
+            <h3>{{ screening.title }}</h3>
+            <div class="meta">
+                <span>{{ screening.start_time|date:"j E, H:i" }}</span>
+                <span>{{ screening.hall.name }}</span>
+            </div>
+            <div class="meter{% if screening.free_seats < 10 %} low{% endif %}"><span style="width: {{ free_pct }}%"></span></div>
+            <div class="card-foot">
+                <span class="price">{{ screening.price }} ₴</span>
+                <span class="seats">вільно {{ screening.free_seats }} місць</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-card">
+        <p class="eyebrow">Без реєстрації</p>
+        <h1>Купівля квитків</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button type="submit" class="btn">Купити</button>
+                <a class="btn btn-ghost" href="{% url 'cinema:screening_detail' screening.pk %}">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

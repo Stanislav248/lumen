@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Реєстрація{% endblock %}
+{% block content %}
+<div class="auth-card form-card">
+    <p class="eyebrow">Ласкаво просимо</p>
+    <h1>Реєстрація</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Зареєструватися</button>
+    </form>
+</div>
+<p class="auth-alt">Вже є акаунт? <a href="{% url 'accounts:login' %}">Увійти</a></p>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% widthratio s.free_seats s.hall.seats 100 as free_pct %}
+<article class="poster-card" style="--g: {{ s.genre_id }}">
+    <a class="poster" href="{% url 'cinema:screening_detail' s.pk %}">
+        <span class="badge-age">{{ s.age_limit }}+</span>
+        <span class="poster-letter">{{ s.title|slice:":1" }}</span>
+        <span class="genre-tag">{{ s.genre.name }}</span>
+    </a>
+    <div class="poster-body">
+        <h3><a href="{% url 'cinema:screening_detail' s.pk %}">{{ s.title }}</a></h3>
+        <div class="meta">
+            <span>{{ s.start_time|date:"j E, H:i" }}</span>
+            <a href="{% url 'cinema:hall_detail' s.hall.pk %}">{{ s.hall.name }}</a>
+        </div>
+        <div class="meter{% if s.free_seats < 10 %} low{% endif %}"><span style="width: {{ free_pct }}%"></span></div>
+        <div class="card-foot">
+            <span class="price">{{ s.price }} ₴</span>
+            {% if s.free_seats > 0 %}
+                <span class="seats">вільно {{ s.free_seats }} місць</span>
+            {% else %}
+                <span class="seats">квитків немає</span>
+            {% endif %}
+        </div>
+    </div>
+</article>

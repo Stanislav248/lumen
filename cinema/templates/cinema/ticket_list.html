@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Квитки{% endblock %}
+{% block content %}
+<div class="page-head">
+    <p class="eyebrow">Лише для персоналу</p>
+    <h1>Куплені квитки</h1>
+    <p>Усього заявок: {{ tickets|length }}</p>
+</div>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr><th>Сеанс</th><th>Клієнт</th><th>Телефон</th><th>Місць</th><th>Отримано</th></tr>
+        </thead>
+        <tbody>
+            {% for t in tickets %}
+            <tr>
+                <td><a href="{% url 'cinema:screening_detail' t.screening.pk %}">{{ t.screening.title }}</a></td>
+                <td>{{ t.client_name }}</td>
+                <td>{{ t.phone }}</td>
+                <td>{{ t.seats_count }}</td>
+                <td>{{ t.created_at|date:"d.m.Y H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="muted">Квитків поки немає.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

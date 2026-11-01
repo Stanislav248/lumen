@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Видалення сеансу{% endblock %}
+{% block content %}
+<div class="auth-card form-card">
+    <p class="eyebrow">Підтвердження</p>
+    <h1>Видалити сеанс?</h1>
+    <p class="muted">Сеанс «{{ screening.title }}» буде видалено разом з усіма квитками на нього.</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Так, видалити</button>
+            <a class="btn btn-ghost" href="{% url 'cinema:screening_detail' screening.pk %}">Скасувати</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

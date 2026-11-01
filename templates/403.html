@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Доступ заборонено{% endblock %}
+{% block content %}
+<section class="error-page">
+    <div class="code grad">403</div>
+    <h1>Доступ заборонено</h1>
+    <p class="muted">Ця сторінка доступна лише персоналу кінотеатру.</p>
+    <a class="btn" href="{% url 'cinema:home' %}">На головну</a>
+</section>
+{% endblock %}

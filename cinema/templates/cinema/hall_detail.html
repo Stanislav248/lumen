@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ hall.name }}{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'cinema:hall_list' %}">← Усі зали</a>
+<div class="page-head">
+    <p class="eyebrow">Зал · {{ hall.seats }} місць</p>
+    <h1>{{ hall.name }}</h1>
+    <p>Сеансів у залі: {{ screenings.count }}</p>
+</div>
+<div class="screen-arc"><span>ЕКРАН</span></div>
+{% for s in screenings %}
+<div class="row-card">
+    <div>
+        <a href="{% url 'cinema:screening_detail' s.pk %}">{{ s.title }}</a>
+        <div class="muted">{{ s.genre.name }}</div>
+    </div>
+    <div class="muted">{{ s.start_time|date:"j E, H:i" }}</div>
+    <span class="price">{{ s.price }} ₴</span>
+</div>
+{% empty %}
+<p class="empty">У цьому залі поки немає сеансів.</p>
+{% endfor %}
+{% endblock %}
